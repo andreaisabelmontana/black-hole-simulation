@@ -4,6 +4,8 @@ A real-time **3D black-hole accretion** simulation. A dominant central mass hold
 
 **▶ Live:** https://andreaisabelmontana.github.io/event-horizon/
 
+> **Not an original idea.** This recreates the concept of an existing project — I didn't invent it. I rebuilt it from scratch, my own way, out of curiosity about how it actually works (and tried to make it a little better along the way).
+
 ## Features
 
 - **Honest gravity** — every particle is integrated under `a = −GM·r / |r|³`, not animated along a fixed texture

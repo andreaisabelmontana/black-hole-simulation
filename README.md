@@ -1,8 +1,8 @@
-# Event Horizon
+# Black Hole Simulation
 
 A real-time **3D black-hole accretion** simulation. A dominant central mass holds tens of thousands of particles on genuine gravitational orbits; whatever crosses the event horizon is consumed and respawns at the disk's edge, so the disk stays alive and turbulent.
 
-**▶ Live:** https://andreaisabelmontana.github.io/event-horizon/
+**▶ Live:** https://andreaisabelmontana.github.io/black-hole-simulation/
 
 > **Not an original idea.** This recreates the concept of an existing project — I didn't invent it. I rebuilt it from scratch, my own way, out of curiosity about how it actually works (and tried to make it a little better along the way).
 

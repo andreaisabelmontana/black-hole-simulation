@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-// Event Horizon — a 3D accretion-disk simulation.
+// Black Hole Simulation — a 3D accretion-disk simulation.
 //
 // A dominant central black hole holds thousands of particles on Newtonian
 // orbits (a = -GM·r / |r|³). Particles that fall inside the event-horizon

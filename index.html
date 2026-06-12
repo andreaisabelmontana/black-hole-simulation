@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Event Horizon — black hole accretion</title>
+  <meta name="description" content="A real-time 3D black-hole accretion simulation: thousands of particles on gravitational orbits, with an event horizon that swallows what falls in." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚫</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="stage"></canvas>
+
+  <header class="hud">
+    <h1>Event Horizon</h1>
+    <p class="tag">Nothing escapes — not even the orbit.</p>
+  </header>
+
+  <aside class="panel" id="panel">
+    <button class="collapse" id="collapse" title="Hide panel">‹</button>
+
+    <section>
+      <h2>Disk</h2>
+      <label>Particles <span data-out="count">12,000</span></label>
+      <input type="range" id="count" min="2000" max="40000" step="1000" value="12000" />
+    </section>
+
+    <section>
+      <h2>Black hole</h2>
+      <label>Mass <span data-out="mass">1.0</span>×</label>
+      <input type="range" id="mass" min="0.4" max="3" step="0.1" value="1" />
+      <label class="chk"><input type="checkbox" id="ring" checked /> Photon ring</label>
+      <label class="chk"><input type="checkbox" id="binary" /> Binary system</label>
+    </section>
+
+    <section class="toggles">
+      <label class="chk"><input type="checkbox" id="spin" checked /> Auto-rotate camera</label>
+    </section>
+
+    <p class="hint">Drag to orbit · scroll to zoom. Particles crossing the horizon are consumed and respawn at the disk's edge.</p>
+  </aside>
+
+  <div id="loading" class="loading">Loading engine…</div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

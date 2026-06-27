@@ -1,13 +1,16 @@
 import * as THREE from "three";
+import { accelFrom, circularSpeed } from "./orbits.js";
 
 // Black Hole Simulation — a 3D accretion-disk simulation.
 //
 // A dominant central black hole holds thousands of particles on Newtonian
-// orbits (a = -GM·r / |r|³). Particles that fall inside the event-horizon
+// orbits (a = GM·(h−p) / |h−p|³). Particles that fall inside the capture
 // radius are "consumed" and respawned at the disk's outer edge, so the disk
 // stays populated and visibly turbulent. The look — temperature-graded colour
 // from the hot inner edge outward, plus a glowing photon ring — is inspired by
-// real accretion imagery; the dynamics are honest gravity, not a fixed texture.
+// real accretion imagery; the dynamics are honest Newtonian gravity, not a
+// fixed texture. The force law and orbit helpers live in ./orbits.js, which is
+// tested with node:test; this file is the Three.js rendering shell around it.
 
 const canvas = document.getElementById("stage");
 const loading = document.getElementById("loading");
@@ -80,8 +83,8 @@ function spawnParticle(i, primary) {
   const px = primary.pos.x + Math.cos(ang) * r;
   const py = (Math.random() - 0.5) * thickness;
   const pz = primary.pos.z + Math.sin(ang) * r;
-  // circular orbital speed v = sqrt(GM/r), tangential
-  const v = Math.sqrt(G * primary.mass * holeMassScale() / r);
+  // circular orbital speed v = sqrt(mu/r), tangential (mu = G*M of this hole)
+  const v = circularSpeed(G * primary.mass * holeMassScale(), r);
   const vx = -Math.sin(ang) * v;
   const vz = Math.cos(ang) * v;
   pos[i * 3] = px; pos[i * 3 + 1] = py; pos[i * 3 + 2] = pz;
@@ -139,15 +142,16 @@ function physics() {
     const ix = i * 3;
     let ax = 0, ay = 0, az = 0;
     let consumed = false;
+    const p = { x: pos[ix], y: pos[ix + 1], z: pos[ix + 2] };
     for (const h of holes) {
-      const dx = h.pos.x - pos[ix], dy = h.pos.y - pos[ix + 1], dz = h.pos.z - pos[ix + 2];
-      const d2 = dx * dx + dy * dy + dz * dz;
-      const d = Math.sqrt(d2);
-      if (d < h.rs) { consumed = true; break; }
-      const a = G * h.mass * ms / (d2 * d);
-      ax += a * dx; ay += a * dy; az += a * dz;
+      const dx = h.pos.x - p.x, dy = h.pos.y - p.y, dz = h.pos.z - p.z;
+      if (dx * dx + dy * dy + dz * dz < h.rs * h.rs) { consumed = true; break; }
+      // Newtonian inverse-square pull toward this hole (see orbits.js).
+      const a = accelFrom(p, h.pos, G * h.mass * ms);
+      ax += a.x; ay += a.y; az += a.z;
     }
     if (consumed) { spawnParticle(i, holes[0]); continue; }
+    // symplectic (semi-implicit) Euler: new velocity first, then position.
     vel[ix] += ax * dt; vel[ix + 1] += ay * dt; vel[ix + 2] += az * dt;
     pos[ix] += vel[ix] * dt; pos[ix + 1] += vel[ix + 1] * dt; pos[ix + 2] += vel[ix + 2] * dt;
     // strayed too far → respawn

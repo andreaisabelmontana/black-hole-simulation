@@ -1,0 +1,10 @@
+{
+  "name": "black-hole-simulation",
+  "version": "1.0.0",
+  "description": "Real-time 3D black-hole accretion sim — Newtonian point-mass gravity with a symplectic-Euler integrator. Core orbital mechanics extracted and tested with node:test.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "license": "MIT"
+}
